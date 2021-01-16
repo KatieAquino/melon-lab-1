@@ -76,9 +76,8 @@ def make_melon_type_lookup(melon_types):
     melon_dictionary = {}
 
     for melon in melon_types:
-        key = melon.code
-
-        melon_dictionary[key] = melon
+        if melon.code not in melon_dictionary:
+            melon_dictionary[melon.code] = melon
     
     return melon_dictionary
 
@@ -89,18 +88,75 @@ def make_melon_type_lookup(melon_types):
 class Melon(object):
     """A melon in a melon harvest."""
 
-    # Fill in the rest
-    # Needs __init__ and is_sellable methods
+    def __init__(self, number, type, shape_rating, color_rating, 
+                field, harvested_by,):
+
+                self.number = number
+                self.type = type
+                self.shape_rating = shape_rating
+                self.color_rating = color_rating
+                self.field = field
+                self.harvested_by = harvested_by
+
+    def is_sellable(self):
+
+        sellable = False
+
+        if self.shape_rating > 5 and self.color_rating > 5:
+            sellable = True
+
+        self.sellable = sellable
+
+        return self.sellable
 
 def make_melons(melon_types):
     """Returns a list of Melon objects."""
 
-    # Fill in the rest
+    all_melons = []
+
+    melon_1 = Melon(1, melon_types['yw'], 8, 7, 2, 'Sheila')
+    melon_1.is_sellable()
+
+    melon_2 = Melon(2, melon_types['yw'], 3, 4, 2, 'Sheila')
+    melon_2.is_sellable()
+
+    melon_3 = Melon(3, melon_types['yw'], 9, 8, 3, 'Sheila')
+    melon_3.is_sellable()
+
+    melon_4 = Melon(4, melon_types['cas'], 10, 6, 35, 'Sheila')
+    melon_4.is_sellable()
+
+    melon_5 = Melon(5, melon_types['cren'], 8, 9, 35, 'Michael')
+    melon_5.is_sellable()
+
+    melon_6 = Melon(6, melon_types['cren'], 8, 2, 35, 'Michael')
+    melon_6.is_sellable()
+
+    melon_7 = Melon(7, melon_types['cren'], 2, 3, 4, 'Michael')
+    melon_7.is_sellable()
+
+    melon_8 = Melon(8, melon_types['musk'], 6, 7, 4, 'Michael')
+    melon_8.is_sellable()
+
+    melon_9 = Melon(9, melon_types['yw'], 7, 10, 3, 'Sheila')
+    melon_9.is_sellable()
+
+    all_melons.extend([melon_1, melon_2, melon_3, melon_4, melon_5, melon_6,
+                    melon_7, melon_8, melon_9])
+
+    return all_melons
 
 def get_sellability_report(melons):
     """Given a list of melon object, prints whether each one is sellable."""
 
-    # Fill in the rest 
+    for melon in melons:
+        if melon.sellable == True:
+            status = '(CAN BE SOLD)'
+    
+        else:
+            status = '(NOT SELLABLE)'
+
+        print(f'Harvested by {melon.harvested_by} from Field {melon.field} {status}')
 
 
 if __name__ == '__main__':
