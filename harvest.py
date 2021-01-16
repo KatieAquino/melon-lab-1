@@ -2,6 +2,8 @@
 # Part 1   #
 ############
 
+import sys
+
 class MelonType(object):
     """A species of melon at a melon farm."""
 
@@ -88,10 +90,9 @@ def make_melon_type_lookup(melon_types):
 class Melon(object):
     """A melon in a melon harvest."""
 
-    def __init__(self, number, type, shape_rating, color_rating, 
+    def __init__(self, type, shape_rating, color_rating, 
                 field, harvested_by,):
 
-                self.number = number
                 self.type = type
                 self.shape_rating = shape_rating
                 self.color_rating = color_rating
@@ -109,40 +110,35 @@ class Melon(object):
 
         return self.sellable
 
-def make_melons(melon_types):
+def make_melons(melon_types, file):
     """Returns a list of Melon objects."""
 
     all_melons = []
+    file_text = open(file)
 
-    melon_1 = Melon(1, melon_types['yw'], 8, 7, 2, 'Sheila')
-    melon_1.is_sellable()
+    for line in file_text:
+        line_info = [line.strip() for line in file_text]
 
-    melon_2 = Melon(2, melon_types['yw'], 3, 4, 2, 'Sheila')
-    melon_2.is_sellable()
+        for item in line_info:
+            melon_info = item.split(" ")
 
-    melon_3 = Melon(3, melon_types['yw'], 9, 8, 3, 'Sheila')
-    melon_3.is_sellable()
+            shape_rating = melon_info[1]
+            shape_rating = int(shape_rating)
 
-    melon_4 = Melon(4, melon_types['cas'], 10, 6, 35, 'Sheila')
-    melon_4.is_sellable()
+            color_rating = melon_info[3]
+            color_rating = int(color_rating)
 
-    melon_5 = Melon(5, melon_types['cren'], 8, 9, 35, 'Michael')
-    melon_5.is_sellable()
+            type = melon_info[5]
+            harvested_by = melon_info[8]
+            field = melon_info[-1]
 
-    melon_6 = Melon(6, melon_types['cren'], 8, 2, 35, 'Michael')
-    melon_6.is_sellable()
+            melon = Melon(melon_types[type], shape_rating, color_rating, 
+                        field, harvested_by)
+            
+            melon.is_sellable()
 
-    melon_7 = Melon(7, melon_types['cren'], 2, 3, 4, 'Michael')
-    melon_7.is_sellable()
+            all_melons.append(melon)
 
-    melon_8 = Melon(8, melon_types['musk'], 6, 7, 4, 'Michael')
-    melon_8.is_sellable()
-
-    melon_9 = Melon(9, melon_types['yw'], 7, 10, 3, 'Sheila')
-    melon_9.is_sellable()
-
-    all_melons.extend([melon_1, melon_2, melon_3, melon_4, melon_5, melon_6,
-                    melon_7, melon_8, melon_9])
 
     return all_melons
 
@@ -160,5 +156,8 @@ def get_sellability_report(melons):
 
 
 if __name__ == '__main__':
-    test_melon = MelonType('muskmelon', 'musk', '1998', 
-                            'green', 'seedless', 'bestseller')
+    file = 'harvest_log.txt'
+    melon_types = make_melon_types()
+    melon_dictionary = make_melon_type_lookup(melon_types)
+    melons_report = make_melons(melon_dictionary, file)
+    sellability_report = get_sellability_report(melons_report)
